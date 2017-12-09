@@ -2,6 +2,7 @@ package com.github.dfqin.grantor;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Map;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.PermissionChecker;
+import android.text.TextUtils;
 import android.util.Log;
 
 /**
@@ -23,6 +25,7 @@ public class PermissionsUtil {
     private static HashMap<String, PermissionListener> listenerMap = new HashMap<>();
     private static boolean showTip = true;
     private static TipInfo tip = null;
+    private static Map<String, Long> permissionsTime = new HashMap<>();
 
     public static void requestPermission(Context context, String permission, PermissionListener listener) {
         requestPermission(context, listener, new String[]{permission}, showTip, tip);
@@ -73,7 +76,16 @@ public class PermissionsUtil {
             return;
         }
 
-        String key = String.valueOf(System.currentTimeMillis());
+        String pers = TextUtils.join("-", permission);
+        Long tm = permissionsTime.get(pers);
+        long curr = System.currentTimeMillis();
+        if (tm != null && tm > 0 && tm + 60000 > curr) {
+            listener.permissionDenied(permission);
+            return;
+        }
+        permissionsTime.put(pers, curr);
+
+        String key = String.valueOf(curr);
         listenerMap.put(key, listener);
         Intent intent = new Intent(context, PermissionActivity.class);
         intent.putExtra("permission", permission);

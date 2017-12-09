@@ -26,10 +26,10 @@ public class PermissionActivity extends AppCompatActivity {
     private boolean showTip;
     private PermissionsUtil.TipInfo tipInfo;
 
-    private String defaultTitle = null;
-    private String defaultContent = null;
-    private String defaultCancel = null;
-    private String defaultEnsure = null;
+    public static String defaultTitle = null;
+    public static String defaultContent = null;
+    public static String defaultCancel = null;
+    public static String defaultEnsure = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,10 +45,18 @@ public class PermissionActivity extends AppCompatActivity {
         showTip = getIntent().getBooleanExtra("showTip", true);
         Serializable ser = getIntent().getSerializableExtra("tip");
 
-        defaultTitle = getString(R.string.permission_info_help);
-        defaultContent = getString(R.string.permission_info_cont);
-        defaultCancel = getString(R.string.permission_info_cancel);
-        defaultEnsure = getString(R.string.permission_info_setting);
+        if (TextUtils.isEmpty(defaultTitle)) {
+            defaultTitle = getString(R.string.permission_info_help);
+        }
+        if (TextUtils.isEmpty(defaultContent)) {
+            defaultContent = getString(R.string.permission_info_cont);
+        }
+        if (TextUtils.isEmpty(defaultCancel)) {
+            defaultCancel = getString(R.string.permission_info_cancel);
+        }
+        if (TextUtils.isEmpty(defaultEnsure)) {
+            defaultEnsure = getString(R.string.permission_info_setting);
+        }
         if (ser == null) {
             tipInfo = new PermissionsUtil.TipInfo(defaultTitle, defaultContent, defaultCancel, defaultEnsure);
         } else {
