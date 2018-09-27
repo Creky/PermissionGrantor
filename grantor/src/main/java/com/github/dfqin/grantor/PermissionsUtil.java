@@ -63,19 +63,12 @@ public class PermissionsUtil {
             return;
         }
 
-        if (Build.VERSION.SDK_INT < 23) {
             if (PermissionsUtil.hasPermission(context, permission)) {
                 listener.permissionGranted(permission);
             } else {
+            if (Build.VERSION.SDK_INT < 23) {
                 listener.permissionDenied(permission);
-            }
-            Log.e(TAG, "API level : " + Build.VERSION.SDK_INT + "不需要申请动态权限!");
-            return;
-        } else if (hasPermission(context, permission)) {
-            listener.permissionGranted(permission);
-            return;
-        }
-
+            } else {
         String pers = TextUtils.join("-", permission);
         Long tm = permissionsTime.get(pers);
         long curr = System.currentTimeMillis();
@@ -95,6 +88,8 @@ public class PermissionsUtil {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         context.startActivity(intent);
+    }
+        }
     }
 
 
