@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">Grantor</string>
     <string name="permission_info_help">Help</string>
     <string name="permission_info_cont">Need more permission, please grant the permissions for this APP follow the path: \"Setting\" - \"Permission"</string>
     <string name="permission_info_cancel">Cancel</string>
